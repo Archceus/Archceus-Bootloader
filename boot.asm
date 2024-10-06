@@ -8,4 +8,9 @@ MV SS, AX
 
 MV SP, 0x2000 ; making an 8k stack
 
+clearscreen:
+    PUSH BP
+    MOV BP, SP
+    PUSHA
 
+    MOV AH, 0x07 ; tells BIOS to scroll down window

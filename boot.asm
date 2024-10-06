@@ -25,3 +25,18 @@ clearscreen:
     MOV SP, BP
     POP BP
     RET
+
+movecursor:
+    PUSH BP
+    MOV BP, SP
+    PUSHA
+
+    MOV DX, [BP + 4] ; get the argument from the stack |BP| = 2, |arg| = 2
+    MOV AH, 0x02     ; set cursor position
+    MOV BH, 0x00     ; page 0 - doesn't matter, we're not using double - buffering
+    INT 0x10 
+
+    POPA
+    MOV SP, BP
+    POP BP
+    RET

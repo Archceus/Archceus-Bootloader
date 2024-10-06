@@ -40,3 +40,32 @@ movecursor:
     MOV SP, BP
     POP BP
     RET
+
+print:
+    PUSH BP
+    MOV BP, SP
+    PUSHA
+    MOV SI, [BP+4] ; grab the pointer to the data
+    MOV BH, 0x00   ; page number, 0 again
+    MOV BL, 0x00   ; foreground color, irrelevant - in text mode
+    MOV AH, 0x0E   ; print character to TTY
+
+.char:
+    MOV AL, [SI]  ; get the current char from our pointer position
+    ADD SI, 1     ; keep incrementing SI until we see a null char
+    OR AL, 0
+    JE .return    ; end if the string is done
+    INT 0x10      ; print the character if we're not done
+    JMP .char     ; keep looping
+
+.return:
+    POPA
+    MOV SP, BP
+    POP BP
+    RET
+
+
+msg: db "Learn Deep, Code Robust, Run Linux!", 0
+
+times 510-(\$-$$) db 0
+dw 0xAA55
